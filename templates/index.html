@@ -1,130 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>File Transfer App</title>
-    <link rel="manifest" href="/static/manifest.json">
+<meta charset="UTF-8">
+<title>File Transfer</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#0f172a">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        img.preview {
-            max-width: 200px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
+<link rel="manifest" href="/static/manifest.json">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-        body {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: white;
-    font-family: "Segoe UI", sans-serif;
+<style>
+/* ---------- BASE ---------- */
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  color: white;
 }
 
+/* ---------- APP SHELL ---------- */
+.app {
+  max-width: 420px;
+  margin: auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  height: 56px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+/* ---------- CARDS ---------- */
 .card {
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 25px;
-    border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.14);
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.25);
+  margin-bottom: 14px;
+}
+
+/* ---------- BUTTONS ---------- */
+button, .btn {
+  border-radius: 14px;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  border: none;
+}
+
+/* ---------- QR ---------- */
+.qr {
+  display: block;
+  margin: 10px auto;
+  max-width: 200px;
+  border-radius: 12px;
+}
+
+/* ---------- FILE GRID ---------- */
+.files {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
 }
 
 .file-card {
-    background: rgba(255,255,255,0.15);
-    border-radius: 12px;
-    padding: 10px;
-    text-align: center;
+  background: rgba(255,255,255,0.18);
+  border-radius: 14px;
+  padding: 8px;
+  text-align: center;
 }
 
 .file-card img {
-    max-width: 100%;
-    border-radius: 8px;
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 6px;
 }
 
-    </style>
+/* ---------- DESKTOP ---------- */
+@media (min-width: 768px) {
+  .app {
+    max-width: 900px;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 16px;
+  }
+}
+</style>
 </head>
-<body class="p-4">
 
-<h1>File Transfer App</h1>
+<body>
 
-{% if message %}
-<div class="alert alert-success">{{ message }}</div>
-{% endif %}
+<div class="app">
 
-<form method="POST" enctype="multipart/form-data" class="mb-4">
-<input type="file" name="file" multiple class="form-control mb-2" required>
-    <button class="btn btn-primary">Upload</button>
-</form>
+<header>File Transfer</header>
 
-<hr>
+<main>
 
-<h4>Scan QR Code on Mobile</h4>
-<img src="{{ url_for('static', filename=qr_image) }}" width="200">
-
-<hr>
-
-<h4>Received Files</h4>
-
-{% if files|length > 1 %}
-<button class="btn btn-warning mb-3" onclick="downloadAllFiles()">
-    Download All
-</button>
-{% endif %}
-
-
-<div class="row">
-{% for file in files %}
-    <div class="col-md-3 mb-4">
-        {% if file.endswith(('png','jpg','jpeg','gif','webp')) %}
-        <img src="{{ url_for('download_file', filename=file) }}" class="preview">
-        {% endif %}
-        <p>{{ file }}</p>
-        <a href="{{ url_for('download_file', filename=file) }}" class="btn btn-sm btn-outline-primary">
-            Download
-        </a>
-    </div>
-{% else %}
-    <p>No files uploaded yet.</p>
-{% endfor %}
-</div>
-
-
+<!-- UPLOAD -->
 <div class="card">
-    <!-- upload form, qr, files here -->
+  <h5>Upload Files</h5>
+
+  {% if message %}
+  <div class="alert alert-success mt-2">{{ message }}</div>
+  {% endif %}
+
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" multiple class="form-control mb-2" required>
+    <button class="btn btn-primary w-100">Upload</button>
+  </form>
 </div>
 
+<!-- QR -->
+<div class="card">
+  <h5>Scan on Mobile</h5>
+  <img src="{{ url_for('static', filename=qr_image) }}" class="qr">
+</div>
 
+<!-- FILES -->
+<div class="card">
+  <h5>Received Files</h5>
 
+  {% if files|length > 1 %}
+  <button class="btn btn-warning w-100 mb-2" onclick="downloadAllFiles()">
+    Download All
+  </button>
+  {% endif %}
+
+  {% if files %}
+  <div class="files">
+    {% for file in files %}
+    <div class="file-card">
+      {% if file.endswith(('png','jpg','jpeg','gif','webp')) %}
+      <img src="{{ url_for('download_file', filename=file) }}">
+      {% endif %}
+      <small>{{ file }}</small>
+      <a href="{{ url_for('download_file', filename=file) }}" class="btn btn-sm btn-outline-light mt-1">
+        Download
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No files yet.</p>
+  {% endif %}
+</div>
+
+</main>
+</div>
 
 <script>
-
-    if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/static/service-worker.js");
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/static/service-worker.js");
 }
 
-
-window.addEventListener("beforeunload", function () {
-    navigator.sendBeacon("/clear-session");
+window.addEventListener("beforeunload", () => {
+  navigator.sendBeacon("/clear-session");
 });
 
-
-
 function downloadAllFiles() {
-    const files = {{ files | tojson }};
-
-    files.forEach((file, index) => {
-        setTimeout(() => {
-            const link = document.createElement("a");
-            link.href = `/uploads/${file}`;
-            link.download = file;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }, index * 400); // delay prevents browser blocking
-    });
+  const files = {{ files | tojson }};
+  files.forEach((file, i) => {
+    setTimeout(() => {
+      const a = document.createElement("a");
+      a.href = `/uploads/${file}`;
+      a.download = file;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, i * 400);
+  });
 }
-
-
 </script>
-
 
 </body>
 </html>
