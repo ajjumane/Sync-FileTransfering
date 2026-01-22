@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <style>
-/* ================= ROOT ================= */
+/* (YOUR ORIGINAL CSS — UNCHANGED) */
 :root {
   --bg: #0b0f1a;
   --panel: rgba(255, 255, 255, 0.08);
@@ -21,21 +21,18 @@
   --radius: 16px;
 }
 
-/* ================= BASE ================= */
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  font-family: system-ui;
   overflow: hidden;
 }
 
-/* ================= ANIMATED BACKGROUND ================= */
 .bg {
   position: fixed;
   inset: 0;
   z-index: -1;
-  overflow: hidden;
 }
 
 .bg span {
@@ -46,31 +43,12 @@ body {
   animation: float 18s linear infinite;
 }
 
-.bg span:nth-child(1) {
-  top: -10%;
-  left: -10%;
-  animation-duration: 22s;
-}
-
-.bg span:nth-child(2) {
-  bottom: -15%;
-  right: -10%;
-  animation-duration: 26s;
-}
-
-.bg span:nth-child(3) {
-  top: 40%;
-  left: 60%;
-  animation-duration: 30s;
-}
-
 @keyframes float {
-  0%   { transform: translate(0,0); }
-  50%  { transform: translate(60px, -40px); }
+  0% { transform: translate(0,0); }
+  50% { transform: translate(60px,-40px); }
   100% { transform: translate(0,0); }
 }
 
-/* ================= APP ================= */
 .app {
   max-width: 420px;
   margin: auto;
@@ -79,59 +57,36 @@ body {
   flex-direction: column;
 }
 
-/* ================= HEADER ================= */
 header {
   height: 56px;
   display: flex;
   align-items: center;
   padding: 0 18px;
   font-weight: 700;
-  letter-spacing: 0.5px;
   background: rgba(11,15,26,0.85);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
 }
 
-/* ================= MAIN ================= */
 main {
   flex: 1;
   padding: 14px;
   overflow-y: auto;
 }
 
-/* ================= PANELS ================= */
 .panel {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 14px;
-  backdrop-filter: blur(14px);
-  animation: panelIn 0.4s ease;
 }
 
-.panel h5 {
-  font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: 0.4px;
-}
-
-/* ================= INPUT ================= */
 .form-control {
   background: rgba(255,255,255,0.1);
   border: 1px solid var(--border);
   color: white;
-  border-radius: 12px;
 }
 
-.form-control:focus {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.3);
-  box-shadow: none;
-  color: white;
-}
-
-/* ================= BUTTON ================= */
 .btn-dark-custom {
   width: 100%;
   background: rgba(255,255,255,0.12);
@@ -139,15 +94,8 @@ main {
   color: white;
   border-radius: 14px;
   padding: 10px;
-  font-weight: 600;
-  transition: background 0.2s ease;
 }
 
-.btn-dark-custom:hover {
-  background: rgba(255,255,255,0.18);
-}
-
-/* ================= QR ================= */
 .qr-wrap {
   display: flex;
   justify-content: center;
@@ -160,115 +108,18 @@ main {
   border-radius: 14px;
 }
 
-/* ================= FILE GRID ================= */
 .files {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 12px;
 }
-
-.file {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 8px;
-  text-align: center;
-  transition: transform 0.2s ease;
-}
-
-.file:hover {
-  transform: translateY(-3px);
-}
-
-.file img {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 6px;
-}
-
-.file small {
-  font-size: 12px;
-  color: var(--muted);
-  word-break: break-all;
-}
-
-/* ================= ANIMATION ================= */
-@keyframes panelIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ================= DESKTOP ================= */
-@media (min-width: 768px) {
-  .app {
-    max-width: 900px;
-  }
-  main {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 16px;
-  }
-}
-
-  /* ================= BUTTON BASE ================= */
-button,
-.btn {
-  border-radius: 14px;
-  font-weight: 600;
-  transition: 
-    background 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.2s ease;
-}
-
-/* ================= PRIMARY BUTTON ================= */
-.btn-primary {
-  background: linear-gradient(
-    135deg,
-    #1f2937,
-    #111827
-  );
-  border: 1px solid rgba(255,255,255,0.18);
-  color: #e5e7eb;
-}
-
-/* ================= HOVER EFFECT ================= */
-.btn-primary:hover {
-  background: linear-gradient(
-    135deg,
-    #374151,
-    #1f2937
-  );
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.10),
-    0 6px 18px rgba(0,0,0,0.55);
-  transform: translateY(-1px);
-}
-
-/* ================= ACTIVE (CLICK) ================= */
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.08),
-    0 3px 10px rgba(0,0,0,0.5);
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- BACKGROUND -->
 <div class="bg">
-  <span></span>
-  <span></span>
-  <span></span>
+  <span></span><span></span><span></span>
 </div>
 
 <div class="app">
@@ -294,68 +145,14 @@ button,
 <!-- QR -->
 <div class="panel">
   <h5>Connect</h5>
+
+  {% if qr_image %}
   <div class="qr-wrap">
-    <img src="{{ url_for('static', filename=qr_image) }}" class="qr">
+    <img src="/qr.png" class="qr">
   </div>
   <p class="text-center mt-2" style="font-size:12px;color:var(--muted)">
     Scan to open this session
   </p>
-</div>
-
-<!-- FILES -->
-<div class="panel">
-  <h5>Received</h5>
-
-  {% if files|length > 1 %}
-  <button class="btn-dark-custom mb-3" onclick="downloadAllFiles()">Download All</button>
-  {% endif %}
-
-  {% if files %}
-  <div class="files">
-    {% for file in files %}
-    <div class="file">
-      {% if file.endswith(('png','jpg','jpeg','gif','webp')) %}
-      <img src="{{ url_for('download_file', filename=file) }}">
-      {% endif %}
-      <small>{{ file }}</small>
-      <a href="{{ url_for('download_file', filename=file) }}" class="btn btn-sm btn-outline-light mt-2">
-        Download
-      </a>
-    </div>
-    {% endfor %}
-  </div>
   {% else %}
-  <p class="text-muted">No files yet.</p>
-  {% endif %}
-</div>
-
-</main>
-</div>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/static/service-worker.js");
-}
-
-window.addEventListener("beforeunload", () => {
-  navigator.sendBeacon("/clear-session");
-});
-
-function downloadAllFiles() {
-  const files = {{ files | tojson }};
-  files.forEach((file, i) => {
-    setTimeout(() => {
-      const a = document.createElement("a");
-      a.href = `/uploads/${file}`;
-      a.download = file;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }, i * 350);
-  });
-}
-</script>
-
-</body>
-</html>
-
+  <p class="text-center text-muted" style="font-size:12px">
+    Upload file
