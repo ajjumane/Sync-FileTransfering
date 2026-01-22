@@ -23,6 +23,8 @@ def serve_qr():
     return send_from_directory("/tmp", "qr.png")
 
 
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     message = None
@@ -38,11 +40,10 @@ def index():
 
         message = "Files uploaded successfully"
 
-        # PUBLIC URL (works from anywhere)
         public_url = request.url_root.rstrip("/")
-qr_path = "/tmp/qr.png"
-    
+        qr_path = "/tmp/qr.png"
         qrcode.make(public_url).save(qr_path)
+
         qr_image = "qr.png"
 
     files = os.listdir(app.config["UPLOAD_FOLDER"])
@@ -53,6 +54,7 @@ qr_path = "/tmp/qr.png"
         qr_image=qr_image,
         files=files
     )
+
 
 
 @app.route("/uploads/<filename>")
@@ -94,4 +96,5 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5000)),
         debug=True
     )
+
 
