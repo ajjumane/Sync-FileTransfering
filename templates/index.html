@@ -2,130 +2,162 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SYNC Transfer</title>
+<title>SYNC</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#0b0f1a">
 
 <link rel="manifest" href="/static/manifest.json">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <style>
-/* ================= BASE ================= */
-* {
-  box-sizing: border-box;
+/* ================= ROOT ================= */
+:root {
+  --bg: #0b0f1a;
+  --panel: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.14);
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --radius: 16px;
 }
 
+/* ================= BASE ================= */
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
-  color: #e5e7eb;
-  background: #0b0f1a;
   overflow: hidden;
 }
 
 /* ================= ANIMATED BACKGROUND ================= */
-.bg-animation {
+.bg {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(148,163,184,0.12), transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(203,213,225,0.08), transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(148,163,184,0.10), transparent 40%);
-  animation: floatBg 20s ease-in-out infinite alternate;
+  overflow: hidden;
 }
 
-@keyframes floatBg {
-  0% {
-    transform: translateY(0px) translateX(0px);
-  }
-  100% {
-    transform: translateY(-30px) translateX(20px);
-  }
+.bg span {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 60%);
+  animation: float 18s linear infinite;
 }
 
-/* ================= APP SHELL ================= */
+.bg span:nth-child(1) {
+  top: -10%;
+  left: -10%;
+  animation-duration: 22s;
+}
+
+.bg span:nth-child(2) {
+  bottom: -15%;
+  right: -10%;
+  animation-duration: 26s;
+}
+
+.bg span:nth-child(3) {
+  top: 40%;
+  left: 60%;
+  animation-duration: 30s;
+}
+
+@keyframes float {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(60px, -40px); }
+  100% { transform: translate(0,0); }
+}
+
+/* ================= APP ================= */
 .app {
   max-width: 420px;
   margin: auto;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 14px;
 }
 
+/* ================= HEADER ================= */
 header {
   height: 56px;
   display: flex;
   align-items: center;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.4px;
+  padding: 0 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: rgba(11,15,26,0.85);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
 }
 
 /* ================= MAIN ================= */
 main {
   flex: 1;
+  padding: 14px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
 }
 
-/* ================= CARDS ================= */
-.card {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(16px);
-  border-radius: 18px;
+/* ================= PANELS ================= */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 16px;
-  border: 1px solid rgba(255,255,255,0.12);
-  animation: fadeUp 0.6s ease forwards;
+  margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+  animation: panelIn 0.4s ease;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ================= BUTTONS ================= */
-.btn-primary {
-  background: linear-gradient(135deg, #1f2933, #111827);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: #e5e7eb;
-  border-radius: 14px;
+.panel h5 {
   font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #374151, #1f2937);
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.08),
-              0 8px 20px rgba(0,0,0,0.6);
-  transform: translateY(-1px);
+  margin-bottom: 12px;
+  letter-spacing: 0.4px;
 }
 
 /* ================= INPUT ================= */
-input[type="file"] {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: #e5e7eb;
+.form-control {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 12px;
+}
+
+.form-control:focus {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: none;
+  color: white;
+}
+
+/* ================= BUTTON ================= */
+.btn-dark-custom {
+  width: 100%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 14px;
+  padding: 10px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.btn-dark-custom:hover {
+  background: rgba(255,255,255,0.18);
 }
 
 /* ================= QR ================= */
+.qr-wrap {
+  display: flex;
+  justify-content: center;
+}
+
 .qr {
-  display: block;
-  margin: 14px auto;
-  max-width: 180px;
-  border-radius: 14px;
-  padding: 8px;
+  max-width: 200px;
+  padding: 10px;
   background: white;
+  border-radius: 14px;
 }
 
 /* ================= FILE GRID ================= */
@@ -135,23 +167,41 @@ input[type="file"] {
   gap: 12px;
 }
 
-.file-card {
-  background: rgba(255,255,255,0.08);
+.file {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
-  transition: transform 0.25s ease, background 0.25s ease;
+  transition: transform 0.2s ease;
 }
 
-.file-card:hover {
+.file:hover {
   transform: translateY(-3px);
-  background: rgba(255,255,255,0.12);
 }
 
-.file-card img {
+.file img {
   max-width: 100%;
   border-radius: 10px;
   margin-bottom: 6px;
+}
+
+.file small {
+  font-size: 12px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ================= DESKTOP ================= */
@@ -159,7 +209,6 @@ input[type="file"] {
   .app {
     max-width: 900px;
   }
-
   main {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -171,7 +220,12 @@ input[type="file"] {
 
 <body>
 
-<div class="bg-animation"></div>
+<!-- BACKGROUND -->
+<div class="bg">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
 
 <div class="app">
 
@@ -180,45 +234,47 @@ input[type="file"] {
 <main>
 
 <!-- UPLOAD -->
-<div class="card">
-  <h5>Upload Files</h5>
+<div class="panel">
+  <h5>Upload</h5>
 
   {% if message %}
-  <div class="alert alert-success mt-2">{{ message }}</div>
+  <div class="alert alert-success">{{ message }}</div>
   {% endif %}
 
   <form method="POST" enctype="multipart/form-data">
-    <input type="file" name="file" multiple class="form-control mb-2" required>
-    <button class="btn btn-primary w-100">Upload</button>
+    <input type="file" name="file" multiple class="form-control mb-3" required>
+    <button class="btn-dark-custom">Send Files</button>
   </form>
 </div>
 
 <!-- QR -->
-<div class="card">
-  <h5>Scan on Mobile</h5>
-  <img src="{{ url_for('static', filename=qr_image) }}" class="qr">
+<div class="panel">
+  <h5>Connect</h5>
+  <div class="qr-wrap">
+    <img src="{{ url_for('static', filename=qr_image) }}" class="qr">
+  </div>
+  <p class="text-center mt-2" style="font-size:12px;color:var(--muted)">
+    Scan to open this session
+  </p>
 </div>
 
 <!-- FILES -->
-<div class="card">
-  <h5>Received Files</h5>
+<div class="panel">
+  <h5>Received</h5>
 
   {% if files|length > 1 %}
-  <button class="btn btn-primary w-100 mb-2" onclick="downloadAllFiles()">
-    Download All
-  </button>
+  <button class="btn-dark-custom mb-3" onclick="downloadAllFiles()">Download All</button>
   {% endif %}
 
   {% if files %}
   <div class="files">
     {% for file in files %}
-    <div class="file-card">
+    <div class="file">
       {% if file.endswith(('png','jpg','jpeg','gif','webp')) %}
       <img src="{{ url_for('download_file', filename=file) }}">
       {% endif %}
       <small>{{ file }}</small>
-      <a href="{{ url_for('download_file', filename=file) }}"
-         class="btn btn-sm btn-primary mt-1 w-100">
+      <a href="{{ url_for('download_file', filename=file) }}" class="btn btn-sm btn-outline-light mt-2">
         Download
       </a>
     </div>
