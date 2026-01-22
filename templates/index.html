@@ -215,6 +215,50 @@ main {
     gap: 16px;
   }
 }
+
+  /* ================= BUTTON BASE ================= */
+button,
+.btn {
+  border-radius: 14px;
+  font-weight: 600;
+  transition: 
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+/* ================= PRIMARY BUTTON ================= */
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    #1f2937,
+    #111827
+  );
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #e5e7eb;
+}
+
+/* ================= HOVER EFFECT ================= */
+.btn-primary:hover {
+  background: linear-gradient(
+    135deg,
+    #374151,
+    #1f2937
+  );
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.10),
+    0 6px 18px rgba(0,0,0,0.55);
+  transform: translateY(-1px);
+}
+
+/* ================= ACTIVE (CLICK) ================= */
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 3px 10px rgba(0,0,0,0.5);
+}
+
 </style>
 </head>
 
@@ -314,3 +358,4 @@ function downloadAllFiles() {
 
 </body>
 </html>
+
