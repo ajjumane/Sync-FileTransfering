@@ -18,6 +18,10 @@ os.makedirs(STATIC_FOLDER, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+@app.route("/qr.png")
+def serve_qr():
+    return send_from_directory("/tmp", "qr.png")
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -36,8 +40,8 @@ def index():
 
         # PUBLIC URL (works from anywhere)
         public_url = request.url_root.rstrip("/")
-        qr_path = os.path.join(STATIC_FOLDER, "qr.png")
-
+qr_path = "/tmp/qr.png"
+    
         qrcode.make(public_url).save(qr_path)
         qr_image = "qr.png"
 
@@ -90,3 +94,4 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5000)),
         debug=True
     )
+
