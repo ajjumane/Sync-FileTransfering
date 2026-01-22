@@ -103,4 +103,25 @@ def cleanup():
 
 atexit.register(cleanup)
 
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        # Generate QR code pointing to download URL
+        download_url = url_for('download_file', filename=filename, _external=True)
+        qr = qrcode.make(download_url)
+        qr_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{filename}_qr.png")
+        qr.save(qr_path)
+
+        return render_template('index.html', qr_path=qr_path, download_url=download_url)
+    return render_template('index.html')
+    
+@app.route('/download/<filename>')
+def download_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
 
