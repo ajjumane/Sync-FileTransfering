@@ -170,6 +170,17 @@ main {
     </form>
   </div>
 
+
+  {% if files %}
+<form method="POST" action="/end-session" class="mt-3">
+  <button class="btn btn-outline-danger w-100">
+    End Session
+  </button>
+</form>
+{% endif %}
+
+
+  
   <!-- QR PANEL -->
   <div class="panel">
     <h5>Connect</h5>
@@ -225,3 +236,4 @@ main {
 
 </body>
 </html>
+
