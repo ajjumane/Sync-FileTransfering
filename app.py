@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, url_for
+from flask import Flask, render_template, request, send_from_directory
 import qrcode
 import os
 import tempfile
@@ -9,22 +9,23 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-# Temporary upload folder (auto-cleaned on exit)
+# Temporary upload folder (Railway-safe)
 UPLOAD_FOLDER = tempfile.mkdtemp(prefix="session_uploads_")
-STATIC_FOLDER = "static"
+QR_FOLDER = "/tmp"
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(STATIC_FOLDER, exist_ok=True)
+os.makedirs(QR_FOLDER, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+
+# -------------------- QR SERVING --------------------
 @app.route("/qr.png")
 def serve_qr():
-    return send_from_directory("/tmp", "qr.png")
+    return send_from_directory(QR_FOLDER, "qr.png")
 
 
-
-
+# -------------------- HOME --------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
     message = None
@@ -40,8 +41,9 @@ def index():
 
         message = "Files uploaded successfully"
 
+        # Public URL (Railway-safe)
         public_url = request.url_root.rstrip("/")
-        qr_path = "/tmp/qr.png"
+        qr_path = os.path.join(QR_FOLDER, "qr.png")
         qrcode.make(public_url).save(qr_path)
 
         qr_image = "qr.png"
@@ -56,7 +58,7 @@ def index():
     )
 
 
-
+# -------------------- SINGLE FILE DOWNLOAD --------------------
 @app.route("/uploads/<filename>")
 def download_file(filename):
     return send_from_directory(
@@ -66,6 +68,7 @@ def download_file(filename):
     )
 
 
+# -------------------- DOWNLOAD ALL AS ZIP --------------------
 @app.route("/download-all")
 def download_all():
     zip_path = os.path.join(app.config["UPLOAD_FOLDER"], "all_files.zip")
@@ -83,18 +86,21 @@ def download_all():
     )
 
 
+# -------------------- CLEANUP --------------------
 def cleanup():
     shutil.rmtree(UPLOAD_FOLDER, ignore_errors=True)
+    qr_file = os.path.join(QR_FOLDER, "qr.png")
+    if os.path.exists(qr_file):
+        os.remove(qr_file)
 
 
 atexit.register(cleanup)
 
 
+# -------------------- RUN --------------------
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000)),
         debug=True
     )
-
-
