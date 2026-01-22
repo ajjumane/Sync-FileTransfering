@@ -212,7 +212,7 @@ main {
         {% for file in files %}
           <div class="file-card">
             {% if file.lower().endswith(('png','jpg','jpeg','gif','webp')) %}
-              <img src="{{ url_for('view_file', filename=file) }}">
+                  <img src="{{ url_for('view_file', filename=file) }}">
             {% endif %}
 
             <small class="d-block text-truncate">{{ file }}</small>
@@ -236,4 +236,5 @@ main {
 
 </body>
 </html>
+
 
