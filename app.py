@@ -19,13 +19,13 @@ os.makedirs(QR_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
-# -------------------- QR SERVING --------------------
+# ---------------- QR SERVE ----------------
 @app.route("/qr.png")
 def serve_qr():
     return send_from_directory(QR_FOLDER, "qr.png")
 
 
-# -------------------- HOME --------------------
+# ---------------- HOME ----------------
 @app.route("/", methods=["GET", "POST"])
 def index():
     message = None
@@ -41,12 +41,14 @@ def index():
 
         message = "Files uploaded successfully"
 
-        # Public URL (Railway-safe)
+        # Public Railway URL
         public_url = request.url_root.rstrip("/")
+
+        # Generate QR
         qr_path = os.path.join(QR_FOLDER, "qr.png")
         qrcode.make(public_url).save(qr_path)
 
-        qr_image = "qr.png"
+        qr_image = True
 
     files = os.listdir(app.config["UPLOAD_FOLDER"])
 
@@ -58,7 +60,7 @@ def index():
     )
 
 
-# -------------------- SINGLE FILE DOWNLOAD --------------------
+# ---------------- SINGLE FILE DOWNLOAD ----------------
 @app.route("/uploads/<filename>")
 def download_file(filename):
     return send_from_directory(
@@ -68,7 +70,7 @@ def download_file(filename):
     )
 
 
-# -------------------- DOWNLOAD ALL AS ZIP --------------------
+# ---------------- DOWNLOAD ALL ----------------
 @app.route("/download-all")
 def download_all():
     zip_path = os.path.join(app.config["UPLOAD_FOLDER"], "all_files.zip")
@@ -86,21 +88,16 @@ def download_all():
     )
 
 
-# -------------------- CLEANUP --------------------
+# ---------------- CLEANUP ----------------
 def cleanup():
     shutil.rmtree(UPLOAD_FOLDER, ignore_errors=True)
-    qr_file = os.path.join(QR_FOLDER, "qr.png")
-    if os.path.exists(qr_file):
-        os.remove(qr_file)
-
 
 atexit.register(cleanup)
 
 
-# -------------------- RUN --------------------
+# ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000)),
-        debug=True
+        port=int(os.environ.get("PORT", 5000))
     )
