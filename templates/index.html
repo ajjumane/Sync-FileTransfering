@@ -136,6 +136,36 @@ main {
   border-radius: 8px;
   margin-bottom: 6px;
 }
+
+  .end-session-form {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+}
+
+.end-session-btn {
+  background: #dc2626; /* solid red */
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 999px; /* oval */
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
+}
+
+.end-session-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(220, 38, 38, 0.45);
+  opacity: 0.95;
+}
+
+.end-session-btn:active {
+  transform: scale(0.97);
+}
+
 </style>
 </head>
 
@@ -171,13 +201,6 @@ main {
   </div>
 
 
-  {% if files %}
-<form method="POST" action="/end-session" class="mt-3">
-  <button class="btn btn-outline-danger w-100">
-    End Session
-  </button>
-</form>
-{% endif %}
 
 
   
@@ -234,7 +257,18 @@ main {
 </main>
 </div>
 
+
+  {% if files %}
+<form method="POST" action="/end-session" class="end-session-form">
+  <button type="submit" class="end-session-btn">
+    End Session
+  </button>
+</form>
+{% endif %}
+
+  
 </body>
 </html>
+
 
 
