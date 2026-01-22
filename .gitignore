@@ -1,0 +1,5 @@
+uploads/*
+static/qr.png
+__pycache__/
+*.pyc
+.env
