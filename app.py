@@ -31,7 +31,6 @@ def index():
     message = None
     qr_image = False
 
-    # Session ended message
     if request.args.get("ended"):
         message = "Session ended. You can start a new transfer."
 
@@ -53,7 +52,6 @@ def index():
 
     files = os.listdir(app.config["UPLOAD_FOLDER"])
 
-    # QR exists check
     if os.path.exists(os.path.join(QR_FOLDER, "qr.png")):
         qr_image = True
 
@@ -65,6 +63,7 @@ def index():
     )
 
 
+# -------- FILE PREVIEW (THUMBNAIL / VIEW) --------
 @app.route("/view/<filename>")
 def view_file(filename):
     return send_from_directory(
@@ -74,13 +73,13 @@ def view_file(filename):
     )
 
 
-# -------- PREVIEW / DOWNLOAD FILE --------
+# -------- FILE DOWNLOAD (FORCED) --------
 @app.route("/uploads/<filename>")
 def download_file(filename):
     return send_from_directory(
         app.config["UPLOAD_FOLDER"],
         filename,
-        as_attachment=False
+        as_attachment=True
     )
 
 
@@ -107,7 +106,6 @@ def download_all():
 # -------- END SESSION --------
 @app.route("/end-session", methods=["POST"])
 def end_session():
-    # Delete uploaded files
     for filename in os.listdir(app.config["UPLOAD_FOLDER"]):
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         if os.path.isfile(file_path):
@@ -116,7 +114,6 @@ def end_session():
             except:
                 pass
 
-    # Delete QR
     qr_path = os.path.join(QR_FOLDER, "qr.png")
     if os.path.exists(qr_path):
         os.remove(qr_path)
@@ -124,7 +121,7 @@ def end_session():
     return redirect(url_for("index", ended="1"))
 
 
-# -------- CLEANUP ON EXIT --------
+# -------- CLEANUP --------
 def cleanup():
     shutil.rmtree(UPLOAD_FOLDER, ignore_errors=True)
 
@@ -137,4 +134,3 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000))
     )
-
